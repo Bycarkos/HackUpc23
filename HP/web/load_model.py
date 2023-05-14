@@ -1,6 +1,7 @@
 import pickle
 import pandas as pd
 import catboost as cb
+import numpy as np
 
 
 
@@ -20,6 +21,28 @@ def predict_individual(id):
     prediction = model.predict(a)
     return prediction
 
+def predict_csv(X_pred):
+    with open("HP\web\models\model_catboost.pkl", "rb") as file:
+        model = pickle.load(file)
+
+    X = pd.read_csv('HP/Datasets/X.csv')
+
+    X_pred["year"] = X_pred["id"].apply(lambda x: x[:4]).astype(np.int64)
+    X_pred["nweek"] = X_pred["id"].apply(lambda x: x[4:6]).astype(np.int64)
+    X_pred["product_number"] = X_pred["id"].apply(lambda x: x.split('-')[1]).astype(np.int64)
+
+    df_merge = X.drop(columns = ["nweek", "year"])
+    df_merge = df_merge.drop_duplicates()
+
+    X_pred = X_pred.reset_index().merge(df_merge,on=['product_number']).set_index('index')
+
+    X_pred = X_pred.sort_index()
+    X_pred = X_pred[X.columns]
+    # X_pred = X_pred.drop(columns = ["id"])
+
+    prediction = model.predict(X_pred)
+
+    return prediction
 
     
 

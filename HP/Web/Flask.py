@@ -1,5 +1,8 @@
 from flask import Flask, render_template, request
-from load_model import predict_individual
+from load_model import predict_individual, predict_csv
+from werkzeug.utils import secure_filename
+import os
+import pandas as pd
 
 
 app = Flask(__name__)
@@ -19,12 +22,21 @@ def submit_id():
     except:
         return "Error: Formato Incorrecto"
 
-@app.route('/submit_csv', methods=['POST'])
+@app.route('/submit_csv', methods=['GET','POST'])
 def submit_csv():
-    
+    # f = request.files.get('file')
+    # data_filename = secure_filename(f.filename)
+    # f.save(os.path.join(app.config['UPLOAD_FOLDER'],
+    #                         data_filename))
+    # session['uploaded_data_file_path'] = os.path.join(app.config['UPLOAD_FOLDER'], data_filename)
     csv_file = request.files['csv']
+    csv_file.save(secure_filename(f'{csv_file.filename}'))
+    # with open(csv_file,'rw') as file:
+    # csv_file.write(f'static/{csv_file.filename}')
     # Aquí puedes hacer lo que quieras con el archivo CSV, como guardarlo en una variable
-    return 'Archivo CSV enviado: {}'.format(csv_file.filename)
+    dataset = pd.read_csv(f'{csv_file.filename}')
+    prediction = predict_csv(dataset)
+    return 'Prediccions model: {}'.format(list(prediction))
 
 if __name__ == '__main__':
     app.run(debug=True)
