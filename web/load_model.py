@@ -7,6 +7,7 @@ import numpy as np
 
 
 
+
 def predict_individual(id):
     with open("./models/model_catboost.pkl", "rb") as file:
         model = pickle.load(file)
