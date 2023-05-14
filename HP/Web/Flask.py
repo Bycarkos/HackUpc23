@@ -1,32 +1,24 @@
 
-# importing Flask and other modules
-from flask import Flask, request, render_template
-from werkzeug.utils import secure_filename
+from flask import Flask, render_template, request
 
+app = Flask(__name__)
 
- 
-# Flask constructor
-app = Flask(__name__)  
+@app.route('/')
+def index():
+    return render_template('upload.html')
 
-   
-	
-@app.route('/uploader', methods = ['GET', 'POST'])
-def upload_file():
-   if request.method == 'POST':
-      f = request.files['file']
-      f.save(secure_filename(f.filename))
-      return 'File uploaded Successfully!'
-   return render_template('upload.html')
- 
-# A decorator used to tell the application
-# which URL is associated function
-@app.route('/', methods =["GET", "POST"])
-def gfg():
-    if request.method == "POST":
-       # getting input with name = fname in HTML form
-       first_name = request.form.get("name")
-       return "Aproximación inventario: "+ first_name
-    return render_template("form.html")
- 
-if __name__=='__main__':
-   app.run()
+@app.route('/submit_id', methods=['POST'])
+def submit_id():
+    id = request.form['id']
+    # Aquí puedes hacer lo que quieras con el ID, como guardarlo en una variable
+    return 'ID enviado: {}'.format(id)
+
+@app.route('/submit_csv', methods=['POST'])
+def submit_csv():
+    
+    csv_file = request.files['csv']
+    # Aquí puedes hacer lo que quieras con el archivo CSV, como guardarlo en una variable
+    return 'Archivo CSV enviado: {}'.format(csv_file.filename)
+
+if __name__ == '__main__':
+    app.run(debug=True)
