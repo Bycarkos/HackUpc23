@@ -1,5 +1,6 @@
-
 from flask import Flask, render_template, request
+from load_model import predict_individual
+
 
 app = Flask(__name__)
 
@@ -11,7 +12,12 @@ def index():
 def submit_id():
     id = request.form['id']
     # Aquí puedes hacer lo que quieras con el ID, como guardarlo en una variable
-    return 'ID enviado: {}'.format(id)
+    try:
+        prediction = predict_individual(id)
+        return 'Predicción: {} unitats'.format(prediction)
+
+    except:
+        return "Error: Formato Incorrecto"
 
 @app.route('/submit_csv', methods=['POST'])
 def submit_csv():
