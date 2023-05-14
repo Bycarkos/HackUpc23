@@ -8,7 +8,7 @@ import numpy as np
 
 
 def predict_individual(id):
-    with open("web\models\model_catboost.pkl", "rb") as file:
+    with open(".\models\model_catboost.pkl", "rb") as file:
         model = pickle.load(file)
 
     X = pd.read_csv('Datasets/X.csv')
@@ -22,10 +22,10 @@ def predict_individual(id):
     return prediction
 
 def predict_csv(X_pred):
-    with open("web\models\model_catboost.pkl", "rb") as file:
+    with open(".\models\model_catboost.pkl", "rb") as file:
         model = pickle.load(file)
 
-    X = pd.read_csv('HP/Datasets/X.csv')
+    X = pd.read_csv('../Datasets/X.csv')
 
     X_pred["year"] = X_pred["id"].apply(lambda x: x[:4]).astype(np.int64)
     X_pred["nweek"] = X_pred["id"].apply(lambda x: x[4:6]).astype(np.int64)
