@@ -31,7 +31,7 @@ Each folder is properly documented with README files to reproduce the results.
 
 
 ## Authors
-# Aboout us
+# About us
 
 About us:
 We are four Data Engineering students from UAB who are passionate about Deep Learning.
